@@ -1,0 +1,28 @@
+---
+import type { GetStaticPaths } from "astro";
+import { sanityClient } from "sanity:client";
+import type { SanityDocument } from "sanity";
+import { PortableText } from "astro-portabletext";
+
+export const getStaticPaths = (async () => {
+  const posts = await sanityClient.fetch<SanityDocument[]>(
+    '*[_type == "post" && defined(slug.current)] | order(_createdAt desc)',
+  );
+  return posts.map((post) => ({
+    params: { slug: (post.slug as any).current as string },
+  }));
+}) satisfies GetStaticPaths;
+
+const { slug } = Astro.params;
+
+const post = await sanityClient.fetch<SanityDocument>(
+  '*[_type == "post" && slug.current == $slug][0]',
+  { slug },
+);
+---
+
+<h1>{post.title}</h1>
+
+<span>{post.publishedAt}</span>
+
+<PortableText value={post.body as any} />

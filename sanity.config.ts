@@ -1,6 +1,7 @@
 // sanity.config.ts
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
+import { postSchema } from "./schema/post";
 
 export default defineConfig({
   name: "sanity-astro",
@@ -9,8 +10,6 @@ export default defineConfig({
   dataset: "production",
   plugins: [structureTool()],
   schema: {
-    types: [
-      /* your content types here*/
-    ],
+    types: [postSchema],
   },
 });
