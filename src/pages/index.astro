@@ -1,11 +1,8 @@
 ---
-import { sanityClient } from "sanity:client";
-import Layout from "../layouts/Layout.astro";
-import type { SanityDocument } from "sanity";
+import { getPosts } from "../queries";
+import Layout from "./_layout.astro";
 
-const posts = await sanityClient.fetch<SanityDocument[]>(
-  '*[_type == "post" && defined(slug.current)] | order(_createdAt desc)',
-);
+const posts = await getPosts()
 ---
 
 <Layout>
