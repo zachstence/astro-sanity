@@ -21,4 +21,14 @@ export default defineConfig({
     }),
     PREVIEW ? react() : undefined,
   ],
+  vite: {
+    optimizeDeps: {
+      // Fixed for similar issue for Nuxt sanity: https://github.com/sanity-io/sanity/issues/7379#issuecomment-2914410299
+      include: [
+        "lodash/isObject.js",
+        "react/compiler-runtime",
+        "lodash/groupBy.js",
+      ],
+    },
+  },
 });
