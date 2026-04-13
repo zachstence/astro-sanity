@@ -2,15 +2,22 @@
 import sanity from "@sanity/astro";
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
-import cloudflare from "@astrojs/cloudflare";
+import node from "@astrojs/node";
 import { loadEnv } from "vite";
 
-const { PREVIEW } = loadEnv(process.env.NODE_ENV ?? "", process.cwd(), "");
+const { PREVIEW: PREVIEW_ENV } = loadEnv(
+  process.env.NODE_ENV ?? "",
+  process.cwd(),
+  "",
+);
+const PREVIEW = PREVIEW_ENV === "true";
 
 // https://astro.build/config
 export default defineConfig({
   output: PREVIEW ? "server" : "static",
-  adapter: cloudflare(),
+  adapter: node({
+    mode: "standalone",
+  }),
   integrations: [
     sanity({
       projectId: "8vxvg7qt",
@@ -18,6 +25,10 @@ export default defineConfig({
       // Set useCdn to false if you're building statically.
       useCdn: false,
       studioBasePath: PREVIEW ? "/admin" : undefined,
+      stega: {
+        enabled: PREVIEW,
+        studioUrl: "/admin",
+      },
     }),
     PREVIEW ? react() : undefined,
   ],
@@ -28,6 +39,7 @@ export default defineConfig({
         "lodash/isObject.js",
         "react/compiler-runtime",
         "lodash/groupBy.js",
+        "@sanity/astro/visual-editing",
       ],
     },
   },
