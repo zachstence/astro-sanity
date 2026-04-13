@@ -2,7 +2,7 @@
 import sanity from "@sanity/astro";
 import { defineConfig } from "astro/config";
 import react from "@astrojs/react";
-import node from "@astrojs/node";
+import cloudflare from "@astrojs/cloudflare";
 import { loadEnv } from "vite";
 
 const { PREVIEW: PREVIEW_ENV } = loadEnv(
@@ -15,9 +15,7 @@ const PREVIEW = PREVIEW_ENV === "true";
 // https://astro.build/config
 export default defineConfig({
   output: PREVIEW ? "server" : "static",
-  adapter: node({
-    mode: "standalone",
-  }),
+  adapter: cloudflare(),
   integrations: [
     sanity({
       projectId: "8vxvg7qt",
